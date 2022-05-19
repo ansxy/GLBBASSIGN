@@ -7,7 +7,7 @@ var window_width = window.innerWidth;
 canvas.width = window_width;
 canvas.height = window_height;
 
-let angle = 0.2;
+let paused = false;
 class MidPoint {
   consturctor() {}
   DrawPixel(x, y) {
@@ -36,7 +36,7 @@ class MidPoint {
       }
     }
   }
-  // Mengambar garis ditengah kotak 
+  // Mengambar garis ditengah kotak
   DrawWheel(x0, y0, radius) {
     let wheel = 4;
     let points = [...Array(wheel).keys()]
@@ -60,6 +60,9 @@ class MidPoint {
   }
 
   animate() {
+    if (paused) {
+      return;
+    }
     context.clearRect(0, 0, window.innerWidth, window.innerHeight);
     requestAnimationFrame(() => this.animate());
     if (xpos + radius >= window.innerWidth || xpos - radius <= 0) {
@@ -77,12 +80,16 @@ class MidPoint {
   }
 
   draw() {
+    context.clearRect(0, 0, window.innerWidth, window.innerHeight);
     let scaledRadius = Math.max(ypos, 0) / Math.max(window_height, 1);
     scaledRadius = 0.5 * (1.0 - scaledRadius);
     scaledRadius = 1.0 - scaledRadius;
 
     this.DrawCircle(xpos, ypos, radius * scaledRadius);
     this.DrawWheel(xpos, ypos, radius * scaledRadius);
+  }
+  stopAnimation() {
+    cancelAnimationFrame(this.animate());
   }
 }
 
@@ -96,33 +103,29 @@ let velocity = 40;
 let friction = 0.018;
 let radius = 50;
 let gravity = 0.1;
-let things = rotate(xpos - 10, ypos - 10);
 
-const drawRectByCorner = (context, corner1, corner2) => {
-  context.fillRect(corner1, corner2, 20, 20); // x, y, width, height
-};
-
-function rotate(cx, cy, x, y, angle) {
-  var radians = (Math.PI / 180) * angle,
-    cos = Math.cos(radians),
-    sin = Math.sin(radians),
-    nx = cos * (x - cx) + sin * (y - cy) + cx,
-    ny = cos * (y - cy) - sin * (x - cx) + cy;
-  return [nx, ny];
-}
 let f = new MidPoint();
 f.draw();
 
-
 $(document).ready(function () {
-  $("#reset").click(function () {
+  $("#StartAnimation").click(function () {
     velocity = $("#Myinput").val();
     dxpos = $("#dxpos_input").val();
     dypos = $("#dypos_input").val();
     m.animate();
   });
+  $("#stop").click(function () {
+    paused = true;
+  });
+  $("#play").click(function () {
+    paused = false;
+    m.animate();
+  });
+  $("#reset").click(function () {
+    velocity = 0
+    paused = true;
+    xpos = 100;
+    ypos = 650;
+    f.draw();
+  });
 });
-
-// f.animate()
-
-// drawRectByCorner(context,xpos,ypos);
