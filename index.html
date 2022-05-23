@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <link rel="stylesheet" href="app.css" />
+  </head>
+  <body>
+    <div id="containerBox">
+      <canvas id="canvas" style="border: 3px solid #fa0909"></canvas>
+    </div>
+    <div id="buttonBox">
+      <button id="StartAnimation" type="button">StartAnimation</button>
+      <button id="stop" type="button">Pause Animation</button>
+      <button id="play" type="button">Play Animation</button>
+      <button id="reset" type="button">Reset All Value</button>
+    </div>
+
+    <div id="inputBox">
+      <p>
+        Velocity :<input type="text" id="Myinput" placeholder="velocity" /><span
+          id="velocity"
+        ></span>
+      </p>
+      <p>
+        MoveX :<input type="text" id="dxpos_input" placeholder="MoveX" /><span
+          id="dxpos"
+        ></span>
+      </p>
+      <p>
+        MoveY :<input type="text" id="moveY_input" placeholder="MoveY" /><span
+          id="moveY"
+        ></span>
+      </p>
+      <p>
+        friction :
+        <input type="text" id="moveY_input" placeholder="MoveY" />
+        <span id="friction"></span>
+      </p>
+    </div>
+  </body>
+  <script src="./app.js"></script>
+</html>

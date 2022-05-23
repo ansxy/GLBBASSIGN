@@ -1,0 +1,11 @@
+#containerBox{
+    text-align: center;
+}
+#buttonBox{
+    margin: 20px;
+    text-align: center;
+}
+
+button{
+    margin-right: 10px;
+}
