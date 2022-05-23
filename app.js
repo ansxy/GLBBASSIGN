@@ -1,8 +1,8 @@
 var canvas = document.querySelector("canvas");
 const context = canvas.getContext("2d");
 
-var window_height = 800;
-var window_width = 1600;
+var window_height = window.innerHeight / 1.5;
+var window_width = window.innerWidth / 1.5;
 
 let topp = 0;
 let left = 0;
@@ -40,11 +40,12 @@ class MidPoint {
   }
   // Mengambar garis ditengah kotak
   DrawWheel(x0, y0, radius) {
-    let wheel = 4;
-    let points = [...Array(wheel).keys()]
-      .map((it) => (it * 360.0) / wheel)
+    let roda = 4;
+    let points = [...Array(roda).keys()]
+      //Ngebagi 360 derajat menjadi "roda" bagian
+      .map((it) => (it * 360.0) / roda)
       .map((it) => it + x0 + y0)
-      .map((it) => it * (Math.PI / 180))
+      .map((it) => it * (Math.PI / 180)) // Merubah derajat menjadi radians
       .map((it) => [x0 + radius * Math.cos(it), y0 + radius * Math.sin(it)])
       .forEach((it) => {
         let [x, y] = it;
@@ -59,7 +60,6 @@ class MidPoint {
     document.getElementById("dxpos").innerHTML = ball.x - 100;
     document.getElementById("moveY").innerHTML =
       ball.y - window_height + radius;
-    document.getElementById("friction").innerHTML = friction;
   }
 
   animate() {
@@ -111,7 +111,7 @@ class MidPoint {
 let friction = 0.2;
 let velocity = 0;
 let radius = 50;
-let gravity = 0.98;
+let gravity = 2;
 var ball = {
   x: 100,
   y: window_height - radius,
@@ -123,6 +123,24 @@ var ball = {
 
 let m = new MidPoint();
 m.draw();
+
+canvas.addEventListener("mousedown", handleMouseDown);
+canvas.addEventListener("mouseup", handleMouseUp);
+
+function handleMouseDown(e) {
+  ball.x = e.pageX - canvas.offsetLeft;
+  ball.y = e.pageY - canvas.offsetTop;
+  ball.vx = ball.vy = 0;
+  paused = true;
+}
+
+function handleMouseUp(e) {
+  ball.vx = e.pageX - canvas.offsetLeft - ball.x;
+  velocity += e.pageX - canvas.offsetLeft - ball.x;
+  ball.vy = e.pageY - canvas.offsetTop - ball.y;
+  paused = false;
+  m.animate();
+}
 
 $(document).ready(function () {
   $("#StartAnimation").click(function () {
@@ -141,6 +159,9 @@ $(document).ready(function () {
   $("#reset").click(function () {
     ball.x = 100;
     ball.y = window_height - radius;
+    ball.vx = 0;
+    ball.vy = 0;
+
     m.draw();
   });
 });
